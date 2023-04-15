@@ -1,23 +1,26 @@
-import userModel from "../models/user.model.js";
-import bcrypt from "bcrypt";
+import User from "../models/user.model.js";
 import { GetUserByEmail } from "./user.service.js";
+import { AppError } from "../error/AppError.js";
 
 const CreateUser = async (user) => {
     try {
-        if(user.password) {
-            const hash = await bcrypt.hash(user.password, 12);
-            user.password = hash;
-        }
-        const newUser = await userModel.create(user);
+        const newUser = await User.create(user);
         return newUser;
     } catch (error) {
-        throw new Error(error);
+        throw new AppError(error);
     }
 }
 
 const LoginUser = async (email, password) => {
     const user = await GetUserByEmail(email);
-    const passwordTrue = await bcrypt.compare(password, user.password)
+    if (!user) {
+        return null;
+    }
+    const isPasswordCorrect = user.comparePassword(password);
+    if (!isPasswordCorrect) {
+        return null;
+    }
+    return user;
 }
 
 export default {

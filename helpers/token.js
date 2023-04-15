@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import { JWT_EXP, JWT_SECRET } from "../config/constants.config";
+import { JWT_EXP, JWT_SECRET } from "../config/constants.config.js";
 
 export const generateAccessToken = (id, role = '') => {
     return jwt.sign({ id, role }, JWT_SECRET, { expiresIn: JWT_EXP });

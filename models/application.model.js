@@ -59,4 +59,5 @@ const ApplicationSchema = new Schema({
     timestamps: true
 });
 
-export default applicationModel = model('application', ApplicationSchema);
+const Application = model('application', ApplicationSchema);
+export default Application;
