@@ -37,6 +37,34 @@ export const SubmitApplication = asyncHandler(async (req, res) => {
      }
      console.log('New application submitted successfully...');
      return handleResponse(res, 201);
-})
+});
 
-// TODO: UpdateApplication, ReviewApplication(Change atatus), UploadApplicationDocuments.
+export const GetApplication = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const applicationReturned = await applicationService.GetApplicationById(id);
+
+    if (!applicationReturned) {
+        console.error('Could not return specific application')
+        return handleResponse(res, 404);
+    }
+
+    return handleResponse(res, 200)
+});
+
+export const UpdateApplicationStatus = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const newStatus = req.query.status;
+
+    const applicationUpdated = await applicationService.UpdateApplication(id, { status: newStatus });
+
+    if(!applicationUpdated) {
+        console.error('Update operation failed...')
+        return handleResponse(res, 500)
+    }
+
+    console.log('Update application status operation successful...')
+    return handleResponse(res, 200, { message: 'Updated application status successfully...'})
+});
+
+// TODO: ReviewApplication(Change status), UploadApplicationDocuments.
