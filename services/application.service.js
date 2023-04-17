@@ -1,5 +1,6 @@
 import { AppError } from '../error/AppError.js';
 import Application from '../models/application.model.js';
+import Complaint from '../models/complaint.model.js';
 
 const CreateApplication = async (application) => {
     try {
@@ -19,9 +20,30 @@ const GetApplicationById = async (id) => {
     }
 }
 
+const UpdateApplication = async (id, updates) => {
+    try {
+        const updatedApplication = await Application.findByIdAndUpdate(id, updates, {
+            new: true
+        });
+        return updatedApplication;
+    } catch (error) {
+        throw new AppError(error, 404);
+    }
+}
+
+const CreateComplaint = async (complaint) => {
+    try {
+        const newComplaint = await Complaint.create(complaint);
+        return newComplaint;
+    } catch (error) {
+        throw new AppError(error, 500)
+    }
+}
+
 // TODO: Get all applications
 
 export default {
     CreateApplication,
-    GetApplicationById
+    GetApplicationById,
+    UpdateApplication
 }
