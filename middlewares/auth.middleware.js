@@ -10,12 +10,12 @@ export const requireAuth = asyncHandler(async (req, _res, next) => {
   }
   const [bearer, token] = authorization.split(" ");
   if (bearer !== "Bearer" || !token) {
-    throw new AppError("Unauthorized", 401)
+    throw new AppError("Unauthenticated", 401)
   }
 
   const decoded = decodeAccessToken(token);
   if (!decoded) {
-    throw new AppError("Unauthorized", 401)
+    throw new AppError("Unauthenticated", 401)
   }
 
   req.user = decoded;

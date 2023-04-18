@@ -9,7 +9,7 @@ export const SignUp = asyncHandler(async (req, res) => {
         return handleResponse(res, 400);
     }
 
-    let createdUser = await auth.CreateUser({ email, password });
+    let createdUser = await auth.CreateUser(req.body);
     if (!createdUser) {
         return handleResponse(res, 500);
     }
