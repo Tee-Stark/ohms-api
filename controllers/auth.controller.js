@@ -1,7 +1,6 @@
 import auth from "../services/auth.service.js";
 import asyncHandler from "../handlers/asyncHandler.js";
 import { generateAccessToken } from "../helpers/token.js";
-import { USER } from "../config/constants.config.js";
 import { handleResponse } from "../handlers/responseHandler.js";
 
 export const SignUp = asyncHandler(async (req, res) => {
@@ -31,6 +30,6 @@ export const Login = asyncHandler(async (req, res) => {
     }
     loginUser = loginUser.toObject();
     loginUser.password = undefined;
-    loginUser.token = generateAccessToken(loginUser._id, USER);
+    loginUser.token = generateAccessToken(loginUser._id, loginUser.role);
     return handleResponse(res, 200, loginUser);
 })

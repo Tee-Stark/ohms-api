@@ -13,10 +13,17 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    applications: {
+    applications: [{
         type: Types.ObjectId,
         ref: 'application'
+    }],
+    role: {
+        type: String,
+        enum: ['ADMIN', 'USER'],
+        default: 'USER'
     }
+}, {
+    timestamps: true,
 })
 
 UserSchema.pre('save', function (next) {
