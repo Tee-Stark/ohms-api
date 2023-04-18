@@ -59,12 +59,26 @@ export const UpdateApplicationStatus = asyncHandler(async (req, res) => {
     const applicationUpdated = await applicationService.UpdateApplication(id, { status: newStatus });
 
     if(!applicationUpdated) {
-        console.error('Update operation failed...')
-        return handleResponse(res, 500)
+        console.error('Update operation failed...');
+        return handleResponse(res, 500);
     }
 
     console.log('Update application status operation successful...')
     return handleResponse(res, 200, { message: 'Updated application status successfully...'})
 });
 
-// TODO: ReviewApplication(Change status), UploadApplicationDocuments.
+// search user application details
+export const SearchUserApplication = asyncHandler(async (req, res) => {
+    const { name } = req.query;
+
+    const usersFound = await applicationService.FindByName(name);
+    if (!usersFound) {
+        console.error("Didn't find an user applications for this search");
+        return handleResponse(res, 404);
+    }
+
+    console.log("Search was successful");
+    return handleResponse(res, 200)
+})
+
+// TODO: UploadApplicationDocuments.

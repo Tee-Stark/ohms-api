@@ -20,6 +20,24 @@ const GetApplicationById = async (id) => {
     }
 }
 
+const GetAllApplications = async () => {
+    try {
+        const applications = await Application.find().lean();
+        return applications;
+    } catch (error) {
+        throw new AppError(error, 404);
+    }
+}
+
+const FindByName = async (name) => {
+    try {
+        const applicationFound = await Application.find({ name: { regex: /name/i }}).lean();
+        return applicationFound;
+    } catch (error) {
+        throw new AppError(error, 404);
+    }
+}
+
 const UpdateApplication = async (id, updates) => {
     try {
         const updatedApplication = await Application.findByIdAndUpdate(id, updates, {
@@ -40,10 +58,11 @@ const CreateComplaint = async (complaint) => {
     }
 }
 
-// TODO: Get all applications
-
 export default {
     CreateApplication,
     GetApplicationById,
-    UpdateApplication
+    GetAllApplications,
+    FindByName,
+    UpdateApplication,
+    CreateComplaint
 }
