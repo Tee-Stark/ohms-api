@@ -15,6 +15,7 @@ export const SignUp = asyncHandler(async (req, res) => {
     }
 
     createdUser.password = undefined;
+    console.log('sign up successful...')
     return handleResponse(res, 201, createdUser);
 })
 
@@ -30,6 +31,8 @@ export const Login = asyncHandler(async (req, res) => {
     }
     loginUser = loginUser.toObject();
     loginUser.password = undefined;
-    loginUser.token = generateAccessToken(loginUser._id, loginUser.role);
+    loginUser.token = generateAccessToken(loginUser._id, loginUser.role);4
+
+    console.log('sign in successful...')
     return handleResponse(res, 200, loginUser);
 })
