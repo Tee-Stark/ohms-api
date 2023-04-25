@@ -16,27 +16,18 @@ export const SubmitApplication = asyncHandler(async (req, res) => {
      } = req.body;
 
      if(!firstname || !lastname || !othername || !faculty || !department || !level || !cgpa || !gender || !hostel) {
+        console.error('missing required params')
         return handleResponse(res, 400);
      }
 
-     const applicationCreated = await applicationService.CreateApplication({
-        firstname,
-        lastname,
-        othername,
-        faculty,
-        department,
-        level,
-        cgpa,
-        gender,
-        hostel
-     });
+     const applicationCreated = await applicationService.CreateApplication(req.body);
 
      if(!applicationCreated) {
         console.error('Couldnt create application successfully');
         return handleResponse(res, 500);
      }
      console.log('New application submitted successfully...');
-     return handleResponse(res, 201);
+     return handleResponse(res, 201, applicationCreated);
 });
 
 export const GetApplication = asyncHandler(async (req, res) => {
@@ -49,8 +40,19 @@ export const GetApplication = asyncHandler(async (req, res) => {
         return handleResponse(res, 404);
     }
 
-    return handleResponse(res, 200)
+    return handleResponse(res, 200, applicationReturned);
 });
+
+export const GetAllApplications = asyncHandler(async (req, res) => {
+    const applications = await applicationService.GetAllApplications();
+    
+    if (!applications) {
+        console.error('Could not return applications')
+        return handleResponse(res, 404);
+    }
+
+    return handleResponse(res, 200, applications);
+})
 
 export const UpdateApplicationStatus = asyncHandler(async (req, res) => {
     const { id } = req.params;
@@ -63,8 +65,9 @@ export const UpdateApplicationStatus = asyncHandler(async (req, res) => {
         return handleResponse(res, 500);
     }
 
-    console.log('Update application status operation successful...')
-    return handleResponse(res, 200, { message: 'Updated application status successfully...'})
+    console.log(`Application: ${applicationUpdated._id} status updated to ${newStatus}`);
+    console.log('Update application status operation successful...');
+    return handleResponse(res, 200, { message: 'Updated application status successfully...'});
 });
 
 // search user application details
@@ -78,7 +81,7 @@ export const SearchUserApplication = asyncHandler(async (req, res) => {
     }
 
     console.log("Search was successful");
-    return handleResponse(res, 200)
+    return handleResponse(res, 200, usersFound);
 })
 
 // TODO: UploadApplicationDocuments.
