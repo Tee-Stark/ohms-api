@@ -12,6 +12,7 @@ export const handleError = (err, _req, res, _next) => {
     return handleResponse(res, err.statusCode, { error: err.message });
   }
 
-  const { statusCode, message } = err;
-  return handleResponse(res, statusCode, { error: message });
+  console.error(err);
+  const status = err.statusCode || 500;
+  return handleResponse(res, status, { error: err.message });
 }
