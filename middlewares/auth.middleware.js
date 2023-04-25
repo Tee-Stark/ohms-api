@@ -14,6 +14,7 @@ export const requireAuth = asyncHandler(async (req, _res, next) => {
   }
 
   const decoded = decodeAccessToken(token);
+  // console.log(decoded)
   if (!decoded) {
     throw new AppError("Unauthenticated", 401)
   }
@@ -25,7 +26,7 @@ export const requireAuth = asyncHandler(async (req, _res, next) => {
 export const requireAdmin = asyncHandler(async (req, res, next) => {
   const { role } = req.user;
 
-  if(role  !== 'ADMIN') {
+  if(role  !== 'admin') {
     console.log(`Someone @${req.user.id} tried something fishy...`);
     return handleResponse(res, 403);
   } else {
