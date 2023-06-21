@@ -19,7 +19,17 @@ const GetUserByID =  async (userId) => {
     }
 }
 
+const GetUserByApplication = async (applicationId) => {
+    try {
+        // find id in application
+        const user = await User.findOne({ application: { $in: [applicationId] }}).lean();
+        return user;
+    } catch (error) {
+        throw new AppError(error, 404)
+    }
+}
 export {
     GetUserByEmail,
-    GetUserByID
+    GetUserByID,
+    GetUserByApplication
 }
