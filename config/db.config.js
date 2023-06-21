@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 import { MONGO_URI } from "./constants.config.js";
 
+let connection = {};
 
 const connectDB = async () => {
     try { 
-        await mongoose.connect(MONGO_URI, {
+        connection = await mongoose.connect(MONGO_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         })
@@ -17,4 +18,4 @@ const connectDB = async () => {
     }
 }
 
-export default connectDB;
+export default {connectDB, connection};
