@@ -31,7 +31,7 @@ export const Login = asyncHandler(async (req, res) => {
     }
     loginUser = loginUser.toObject();
     loginUser.password = undefined;
-    loginUser.token = generateAccessToken(loginUser._id, loginUser.role);4
+    loginUser.token = generateAccessToken(loginUser._id, loginUser.role);
 
     console.log('sign in successful...')
     return handleResponse(res, 200, loginUser);
