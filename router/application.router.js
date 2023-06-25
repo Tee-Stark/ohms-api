@@ -5,9 +5,9 @@ import { requireAdmin, requireAuth } from '../middlewares/auth.middleware.js';
 const applicationRouter = express.Router();
 
 applicationRouter.post('/create', requireAuth, SubmitApplication);
-applicationRouter.get('/search', requireAuth, SearchUserApplication);
+applicationRouter.get('/search', [requireAuth, requireAdmin], SearchUserApplication);
 applicationRouter.get('/', [requireAuth, requireAdmin], GetAllApplications);
-applicationRouter.get('/:id', requireAuth, GetApplication);
+applicationRouter.get('/:id', [requireAuth], GetApplication);
 applicationRouter.get('/:id/review', [requireAuth, requireAdmin], UpdateApplicationStatus);
 
 
