@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { APPLICATION_APPROVED_NOTE, APPLICATION_PENDING_NOTE, APPLICATION_REJECTED_NOTE, APPROVED_STATUS, PENDING_STATUS, REJECTED_STATUS } from "../config/constants.config.js";
 
 const { Schema, Types, model } = mongoose;
 
@@ -27,16 +28,14 @@ const ApplicationSchema = new Schema({
         type: Number,
         required: true
     },
-    cgpa: {
-        type: Number,
+    roomNumber: {
+        type: String,
+        required: true
     },
     gender: {
         type: String,
         enum: ['male', 'female'],
-    },
-    hostel: {
-        type: String,
-        required: true
+        default: 'male',
     },
     hostelPaySlipUrl: {
         type: String
@@ -52,8 +51,17 @@ const ApplicationSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['PENDING', 'ACCEPTED', 'REJECTED'],
-        default: 'PENDING',
+        enum: [PENDING_STATUS, APPROVED_STATUS, REJECTED_STATUS],
+        default: PENDING_STATUS,
+    },
+    note: {
+        type: String,
+        enum: [APPLICATION_APPROVED_NOTE, APPLICATION_PENDING_NOTE, APPLICATION_REJECTED_NOTE],
+        default: APPLICATION_PENDING_NOTE,
+    },
+    slipGeneratable: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true
