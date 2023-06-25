@@ -1,11 +1,10 @@
 import { AppError } from '../error/AppError.js';
 import Application from '../models/application.model.js';
-import Complaint from '../models/complaint.model.js';
 
-const CreateApplication = async (application) => {
+const CreateApplication = async (application, session) => {
     try {
-        const newApplication = await Application.create(application);
-        return newApplication;
+        const newApplication = await Application.create([application], session);
+        return newApplication[0];
     } catch (error) {
         throw new AppError(error, 500);
     }
@@ -13,8 +12,8 @@ const CreateApplication = async (application) => {
 
 const GetApplicationById = async (id) => {
     try {
-        const application = await Application.findById(id).lean();
-        return application;
+        const application = await Application.findById(id).lean();  
+        return application ? application : application[0];
     } catch (error) {
         throw new AppError(error, 404);
     }
@@ -29,19 +28,22 @@ const GetAllApplications = async () => {
     }
 }
 
-const FindByName = async (name) => {
-    try {
-        const applicationFound = await Application.find({ name: { regex: /name/i }}).lean();
-        return applicationFound;
-    } catch (error) {
-        throw new AppError(error, 404);
-    }
-}
+// const FindByName = async (name) => {
+//     try {
+//         const regex = new RegExp(name, 'i');
+//         const applicationFound = await Application.find({ firstname: regex }).lean();
+//         return applicationFound[0];
+//     } catch (error) {
+//         throw new AppError(error, 404);
+//     }
+// }
 
-const UpdateApplication = async (id, updates) => {
+const UpdateApplication = async (id, updates, options = {}) => {
     try {
+        let session = options['session'] || undefined;
         const updatedApplication = await Application.findByIdAndUpdate(id, updates, {
-            new: true
+            new: true,
+            session: session
         });
         return updatedApplication;
     } catch (error) {
@@ -49,12 +51,12 @@ const UpdateApplication = async (id, updates) => {
     }
 }
 
-const CreateComplaint = async (complaint) => {
+const Search = async (query) => {
     try {
-        const newComplaint = await Complaint.create(complaint);
-        return newComplaint;
+        const applications = await Application.find(query);
+        return applications;
     } catch (error) {
-        throw new AppError(error, 500)
+        throw new AppError(error, 404);
     }
 }
 
@@ -62,7 +64,7 @@ export default {
     CreateApplication,
     GetApplicationById,
     GetAllApplications,
-    FindByName,
+    // FindByName
     UpdateApplication,
-    CreateComplaint
+    Search
 }
