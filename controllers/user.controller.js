@@ -34,8 +34,8 @@ export const GetUserProfileByID = asyncHandler(async (req, res) => {
     }
 
     const latestApplicationIdx = user.applications.length - 1;
-    const note = user.applications[latestApplicationIdx].note;
+    const note = user.applications.length > 0 ? user.applications[latestApplicationIdx].note : 'No application';
 
     console.log('Successfully returned user...');
-    return handleResponse(res, 200, { note: note ? note : 'No application' });
+    return handleResponse(res, 200, { note });
 });
