@@ -1,15 +1,17 @@
 import mongoose from "mongoose";
 import { MONGO_URI } from "./constants.config.js";
 
-let connection = {};
+var connection;
 
 const connectDB = async () => {
     try { 
-        connection = await mongoose.connect(MONGO_URI, {
+        await mongoose.connect(MONGO_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         })
 
+        connection = mongoose.connection;
+        // console.log(connection)
         console.log('MongoDB Connected...')
     } catch (error) {
         console.error('DB Connection failed...');
@@ -18,4 +20,4 @@ const connectDB = async () => {
     }
 }
 
-export default {connectDB, connection};
+export {connectDB, connection};
