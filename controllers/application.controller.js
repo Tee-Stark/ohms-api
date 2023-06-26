@@ -37,7 +37,8 @@ export const SubmitApplication = asyncHandler(async (req, res) => {
 
         console.log('starting transaction...')
         applicationCreated = await applicationService.CreateApplication(applicationData, session);
-        await userService.UpdateUser(id, { $push : { applications: applicationCreated._id }}, { session });
+        const userUpdated = await userService.UpdateUser(id, { $push : { applications: applicationCreated._id }}, { session });
+        console.log('application pushed to the user', userUpdated._id)
         console.log('Application created successfully...');
 
         await session.commitTransaction(); 
@@ -63,15 +64,17 @@ export const GetApplication = asyncHandler(async (req, res) => {
     const applicationReturned = await applicationService.GetApplicationById(applicationId);
 
     if (!applicationReturned) {
-        console.error('Could not return specific application')
-        return handleResponse(res, 404);
+        // console.error('wo')
+        throw new AppError('Application not found', 404)
     }
 
-    if (role === 'user') {
-        let respData = applicationReturned.slipGeneratable ? applicationReturned : applicationReturned.note;
+    let respData = applicationReturned;
+    if (role === 'admin' || (role === 'user' && applicationReturned.slipGeneratable)) {
         return handleResponse(res, 200, { respData });
+    } else {
+        respData = applicationReturned.note
+        return handleResponse(res, 200, respData);
     }
-    return handleResponse(res, 200, applicationReturned);
 });
 
 export const GetAllApplications = asyncHandler(async (req, res) => {
