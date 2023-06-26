@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { AppError } from '../error/AppError.js';
 import Application from '../models/application.model.js';
 
@@ -12,8 +13,9 @@ const CreateApplication = async (application, session) => {
 
 const GetApplicationById = async (id) => {
     try {
-        const application = await Application.findById(id).lean();  
-        return application ? application : application[0];
+        console.log('now in application func')
+        const application = await Application.findById(id).lean();
+        return application;
     } catch (error) {
         throw new AppError(error, 404);
     }
