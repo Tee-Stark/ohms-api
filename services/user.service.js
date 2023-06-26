@@ -45,6 +45,7 @@ const UpdateUser = async (userId, update, options) => {
             new: true,
             session: options.session ? options.session : undefined
         });
+        return updated;
     } catch (error) {
         throw new AppError(error, 500)
     }
